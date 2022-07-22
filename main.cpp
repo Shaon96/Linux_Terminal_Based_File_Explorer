@@ -629,6 +629,7 @@ void copy_file(const char* src_path, const char* file_name, const char* dest_dir
     join_paths(dest_dir_path, file_name, out_new_dest_path);
     char* out_absolute_src_path;
     if (!path_exists(file_name)) {
+        cout << "path exists" << endl;
         //relative
         join_paths(src_path, file_name, out_absolute_src_path);
     }else{
@@ -638,9 +639,11 @@ void copy_file(const char* src_path, const char* file_name, const char* dest_dir
     }
     unsigned char buffer[4096];
     int  src_file = open(out_absolute_src_path, O_RDONLY);
+    cout << " src_file : " << out_absolute_src_path << endl;
     int  dest_file = open(out_new_dest_path, O_CREAT | O_WRONLY);
-
+    cout << " dest_file : " << out_new_dest_path << endl;
     while (1) {
+        FILE *fptr = fopen(out_absolute_src_path, "r");
         int res = read(src_file, buffer, 4096);
         if (res == -1) {
             printf("Error reading file.\n");
@@ -650,7 +653,7 @@ void copy_file(const char* src_path, const char* file_name, const char* dest_dir
         int n = res;
 
         if (n == 0) break;
-
+        // use stream.
         res = write(dest_file, buffer, n);
         if (res == -1) {
             printf("Error writing to file.\n");
